@@ -1,0 +1,27 @@
+class TellingStatus:
+    NIET_INGESCHREVEN = "Niet ingeschreven"
+    NIET_BEKOSTIGBAAR = "Niet bekostigbaar"
+    NIET_NAAR_BRON = "Niet verzenden naar BRON"
+    DUBBELE_INSCHRIJVING = "Niet bekostigbaar, dubbele inschrijving"
+    INBURGERING = "Inburgering"
+    UITWISSELING = "Uitwisseling"
+    REGULIER_NL = "Regulier NL"
+    REGULIER = "Regulier"
+    CATEGORIE_1 = "Categorie 1"
+    CATEGORIE_2 = "Categorie 2"
+
+    TBGI_ONBEKEND = "Onbekend"
+
+    ALT_NIET_INGESCHREVEN = [NIET_INGESCHREVEN, INBURGERING, UITWISSELING]
+    ALT_REGULIER = [REGULIER, REGULIER_NL]
+
+    @staticmethod
+    def is_gelijk(s1: str, s2: str):
+        if s1 == s2:
+            return True
+        elif s1 in TellingStatus.ALT_REGULIER and s2 in TellingStatus.ALT_REGULIER:
+            return True
+        elif s1 in TellingStatus.ALT_NIET_INGESCHREVEN and s2 in TellingStatus.ALT_NIET_INGESCHREVEN:
+            return True
+        else:
+            return False

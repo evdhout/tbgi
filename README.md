@@ -1,2 +1,3 @@
 # tbgi
-Vergelijk TBGI met gegevens in Somtoday LVS
+Vergelijk TBGI (Terugmelding BekostigingsGrondslagen Individueel) met 
+gegevens in Somtoday LVS.

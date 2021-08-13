@@ -1,3 +1,4 @@
+import platform
 import tkinter as tk
 from tkinter import Tk, StringVar, IntVar, filedialog
 from tkinter import ttk
@@ -14,6 +15,9 @@ class AppView(Tk):
         self.active_file_selectors = False
 
         self.title("Vergelijk TBGI met Somtoday")
+        # use classic theme if not on windows
+        if platform.system != 'Windows':
+            ttk.Style().theme_use('classic')
 
         self.app_frame = ttk.Frame(self)
         self.app_frame.grid(column=0, row=0, sticky="N", padx=5, pady=5)

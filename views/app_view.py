@@ -105,9 +105,9 @@ class AppView(Tk):
     def validate(self, *args):
         if self.tbgi_filename_string.get() != 'Kies TBGI bestand' \
                 and self.somtoday_filename_string.get() != 'Kies Somtoday bestand':
-            self.vergelijk_button.state(['!disabled'])
+            self.vergelijk_button.state(['!disabled', '!active', '!focus', '!hover'])
         else:
-            self.vergelijk_button.state(['disabled'])
+            self.vergelijk_button.state(['disabled', '!active', '!focus', '!hover'])
 
     def change_soort_teldatum(self, *args):
         if self.soort_teldatum_string.get() == Options.REGULIER:

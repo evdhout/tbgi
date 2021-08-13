@@ -7,15 +7,18 @@ from models.tbgi import Tbgi
 
 class TbgiController:
     def __init__(self, options: Options):
-        df_tbgi = pd.read_csv(options.tbgi,
-                              index_col=False,
-                              usecols=[*Tbgi.COLUMN_TYPES.keys(), *Tbgi.DATE_COLUMNS, *Tbgi.BOOL_COLUMNS],
-                              dtype=Tbgi.COLUMN_TYPES,
-                              true_values=['J', 'j', 'Ja', 'ja', 'JA'],
-                              false_values=['N', 'n', 'Nee', 'nee', 'NEE'],
-                              parse_dates=Tbgi.DATE_COLUMNS,
-                              sep=';'
-                              )
+        try:
+            df_tbgi = pd.read_csv(options.tbgi,
+                                  index_col=False,
+                                  usecols=[*Tbgi.COLUMN_TYPES.keys(), *Tbgi.DATE_COLUMNS, *Tbgi.BOOL_COLUMNS],
+                                  dtype=Tbgi.COLUMN_TYPES,
+                                  true_values=['J', 'j', 'Ja', 'ja', 'JA'],
+                                  false_values=['N', 'n', 'Nee', 'nee', 'NEE'],
+                                  parse_dates=Tbgi.DATE_COLUMNS,
+                                  sep=';'
+                                  )
+        except ValueError as e:
+            raise e
 
         c = Categorie(options)
         df_tbgi['categorie'] = df_tbgi.apply(lambda x: c.get_category_tbgi(x['SIGNAAL_1'],

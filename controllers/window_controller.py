@@ -46,7 +46,6 @@ class WindowController:
         elif part == 5:
             self.vergelijk.check_somtoday()
             self.app_view.update_progress(message='Vergelijking afgerond', percentage=100)
-            self.vergelijk.print_results()
             self.app_view.display(self.vergelijk.telling, self.vergelijk.fouten)
             self.app_view.enable_all_input()
             self.vergelijk = None

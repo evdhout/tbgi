@@ -7,7 +7,6 @@ from models.tbgi import Tbgi
 
 class TbgiController:
     def __init__(self, options: Options):
-        print(options.tbgi)
         df_tbgi = pd.read_csv(options.tbgi,
                               index_col=False,
                               usecols=[*Tbgi.COLUMN_TYPES.keys(), *Tbgi.DATE_COLUMNS, *Tbgi.BOOL_COLUMNS],

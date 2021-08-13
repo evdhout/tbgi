@@ -38,7 +38,7 @@ class TellingView:
         for i in range(len(TellingView.ROWS)):
             label = TellingView.ROWS[i]
             self.rows[label] = {}
-            self.rows[label]['header'] = (ttk.Label(master=self.table_frame, width=20,
+            self.rows[label]['header'] = (ttk.Label(master=self.table_frame,
                                                     text=TellingView.ROWS[i], style='TableHeader.TLabel'))
             self.rows[label]['header'].grid(row=i+1, column=0, padx=1, pady=1, sticky=tk.NSEW)
 

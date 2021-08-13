@@ -161,7 +161,6 @@ class AppView(Tk):
         filename = filedialog.askopenfilename(filetypes=filetypes,
                                               title=title,
                                               initialdir=self.initial_directory)
-        print(filename)
         if filename:
             filename_string.set(filename)
 

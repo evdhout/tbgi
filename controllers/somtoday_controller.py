@@ -45,10 +45,10 @@ class SomtodayController:
 
         # self.somtoday.eind.fillna(date(self.options.bekostigingsjaar, 12, 31), inplace=True)
         c = Categorie(options)
-        somtoday['categorie'] = somtoday.apply(lambda x: c.get_category_somtoday(x['dinl'],
+        somtoday['categorie'] = somtoday.apply(lambda x: c.get_category_somtoday(x['dinl'].date(),
                                                                                  x['nat'],
-                                                                                 x['begin'],
-                                                                                 x['eind'],
+                                                                                 x['begin'].date(),
+                                                                                 x['eind'].date(),
                                                                                  x['bek'],
                                                                                  x['stam'],
                                                                                  x['bron']),

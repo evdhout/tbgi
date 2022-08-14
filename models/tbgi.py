@@ -51,10 +51,14 @@ class Tbgi:
                     "PARAMETER_53": 'string',
                     "PARAMETER_54": 'string',
                     "PARAMETER_55": 'string',
+                    "TARIEF": 'category'
                     }
-    DATE_COLUMNS = ["TELDATUM", "DATUM_BINNENKOMST_IN_NL"]
+    DATE_COLUMNS = ["TELDATUM", "DATUM_BINNENKOMST_IN_NL", "DATUM_TIJD_BEPALING_GRONDSLAGEN"]
     BOOL_COLUMNS = ["INDICATIE_BEKOSTIGBAAR", "INDICATIE_NK_KORTER_DAN_JAAR"]
     LOCATION = '03XF05'
+
+    TRUE_VALUES = ['J', 'j', 'Ja', 'ja', 'JA']
+    FALSE_VALUES = ['N', 'n', 'Nee', 'nee', 'NEE']
 
     def __init__(self, tbgi: pd.DataFrame):
         self.tbgi = tbgi

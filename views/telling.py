@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import Tk, Toplevel, font
+from tkinter import Tk, Toplevel
 from tkinter import ttk
 
 from models.telling_status import TellingStatus as ts
@@ -12,15 +12,6 @@ class TellingView:
     def __init__(self, master: Toplevel or Tk):
         self.master = master
 
-        style = ttk.Style(self.master)
-        table_font = font.nametofont(style.lookup(style='TLabel', option='font')).copy()
-        table_font.configure(weight='bold')
-        style.configure('TableHeader.TLabel', background='grey', foreground='white',
-                        font=table_font, padding=[2, 5, 2, 5])
-        style.configure('TableDataOdd.TLabel', padding=[2, 5, 2, 5], background='white')
-        style.configure('TableDataEven.TLabel', padding=[2, 5, 2, 5], background='#ccc')
-
-        style.configure('Table.TFrame', background="black")
         self.table_frame = ttk.Frame(self.master, style='Table.TFrame')
         self.table_frame.grid(row=0, column=0, padx=5, pady=5, sticky=tk.NE)
 

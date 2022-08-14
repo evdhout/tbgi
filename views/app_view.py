@@ -1,6 +1,6 @@
 import platform
 import tkinter as tk
-from tkinter import Tk, StringVar, IntVar, filedialog
+from tkinter import Tk, StringVar, IntVar, filedialog, font
 from tkinter import ttk
 
 from models.options import Options
@@ -14,12 +14,36 @@ class AppView(Tk):
         self.initial_directory = options.initial_directory
         self.active_file_selectors = False
 
-        self.title("Vergelijk TBGI met Somtoday")
+        self.title("Vergelijk TBG-I met Somtoday")
+
+        # setup styling
+        style = ttk.Style()
+
         # use classic theme if not on windows
         if platform.system != 'Windows':
-            ttk.Style().theme_use('classic')
+            style.theme_use('classic')
+
+        # set up table layout, with striping.
+        table_font = font.nametofont(style.lookup(style='TLabel', option='font')).copy()
+        table_font.configure(weight='bold')
+        style.configure('TableHeader.TLabel', background='grey', foreground='white',
+                        font=table_font, padding=[2, 5, 2, 5])
+        style.configure('TableDataOdd.TLabel', padding=[2, 5, 2, 5], background='white')
+        style.configure('TableDataEven.TLabel', padding=[2, 5, 2, 5], background='#ccc')
+        style.configure('Table.TFrame', background="black")
+
+        # set up treeview layout
+        style.configure("Treeview",
+                        background="white",
+                        foreground="black",
+                        rowheight=25,
+                        fieldbackground="white")
+        style.map('Treeview',
+                  background=[('selected', '#3677A8')],
+                  foreground=[('selected', 'white')])
 
         self.app_frame = ttk.Frame(self)
+
         self.app_frame.grid(column=0, row=0, sticky="N", padx=5, pady=5)
 
         self.config_frame = ttk.LabelFrame(self.app_frame, text='Instellingen vergelijking', width=800, height=250)
@@ -58,7 +82,7 @@ class AppView(Tk):
 
         self.bekostigingsjaar_label = ttk.Label(master=self.config_frame, text='Bekostigingsjaar:')
         self.bekostigingsjaar_string = StringVar(self, name='Bekostigingsjaar')
-        self.bekostigingsjaar_string.set(options.bekostigingsjaar)
+        self.bekostigingsjaar_string.set(str(options.bekostigingsjaar))
         self.bekostigingsjaar_spinbox = ttk.Spinbox(master=self.config_frame,
                                                     from_=2018, to=2100, increment=1,
                                                     textvariable=self.bekostigingsjaar_string)

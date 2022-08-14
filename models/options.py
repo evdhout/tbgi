@@ -45,10 +45,12 @@ class Options:
         self.somtoday = kwargs.get('somtoday', None)
         self.bekostigingsjaar = int(kwargs.get('bekostigingsjaar', self.today.year))
 
-        teldatum = kwargs.get('teldatum', self.today.month)
-        try:
-            self.teldatum_naam = Options.TELDATUM_PER_MAAND[teldatum]
-        except KeyError:
+        self.verbose = kwargs.get('verbose', self.verbose)
+
+        teldatum = kwargs.get('teldatum', None)
+        if teldatum is None:
+            self.teldatum_naam = Options.TELDATUM_PER_MAAND[self.today.month]
+        else:
             self.teldatum_naam = teldatum
 
         try:

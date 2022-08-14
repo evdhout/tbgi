@@ -12,8 +12,8 @@ class TbgiController:
                                   index_col=False,
                                   usecols=[*Tbgi.COLUMN_TYPES.keys(), *Tbgi.DATE_COLUMNS, *Tbgi.BOOL_COLUMNS],
                                   dtype=Tbgi.COLUMN_TYPES,
-                                  true_values=['J', 'j', 'Ja', 'ja', 'JA'],
-                                  false_values=['N', 'n', 'Nee', 'nee', 'NEE'],
+                                  true_values=Tbgi.TRUE_VALUES,
+                                  false_values=Tbgi.FALSE_VALUES,
                                   parse_dates=Tbgi.DATE_COLUMNS,
                                   sep=';'
                                   )

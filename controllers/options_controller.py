@@ -8,6 +8,8 @@ from functions.path_checks import argparse_file_exists, directory_exists
 
 class OptionsController:
     def __init__(self, program_type: str = 'cli'):
+        self.call_type = program_type
+
         if 'cli' == program_type:
             args = OptionsController.parse_arguments()
         else:
@@ -21,6 +23,7 @@ class OptionsController:
         config.read('tbgi.ini')
 
         options['verbose'] = config.getboolean('DEFAULT', 'verbose', fallback=False)
+        options['verbose'] = True
         initial_directory = config.get('DEFAULT', 'initial directory', fallback=None)
         if initial_directory is not None:
             options['initial directory'] = directory_exists(initial_directory)

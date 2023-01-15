@@ -1,16 +1,16 @@
 from views.app_view import AppView
 from views.messagebox import MessageBox
-from models.options import Options
-from controllers.tbgi_controller import TbgiController, Tbgi
-from controllers.somtoday_controller import SomtodayController, Somtoday
+from models.settings import Settings
+from controllers.tbgi_csv_controller import TbgiCsvController, Tbgi
+from controllers.somtoday_csv_controller import SomtodayCsvController, Somtoday
 from controllers.compare_controller import Vergelijk
 from functions.path_checks import file_exists
 
 
 class WindowController:
-    def __init__(self, options: Options):
-        self.options = options
-        self.app_view = AppView(options=self.options)
+    def __init__(self, settings: Settings):
+        self.settings = settings
+        self.app_view = AppView(settings=self.settings)
         self.app_view.vergelijk_button.configure(command=self.compare)
         self.app_view.mainloop()
         self.vergelijk: Vergelijk or None = None
@@ -38,28 +38,12 @@ class WindowController:
                                       detail=str(e))
                 return
 
-            self.options.update_settings(**settings)
+            self.settings.update_settings(**settings)
 
-            self.app_view.update_progress(message='Inlezen TBGI bestand', percentage=5)
+            self.app_view.update_progress(message='Inlezen Somtoday bestand', percentage=5)
         elif part == 1:
             try:
-                self.tbgi = TbgiController(options=self.options).tbgi
-            except ValueError as e:
-                MessageBox.show_error(message='TBGI bestand is niet correct gelezen',
-                                      title='Fout bij inlezen TBGI',
-                                      detail=str(e))
-                self._compare_cleanup(empty_progress=True)
-                return
-            except Exception as e:
-                MessageBox.show_error(message='Onbekende fout bij het lezen van het TBGI bestand',
-                                      title='Onbekende fout bij inlezen TBGI',
-                                      detail=str(e))
-                self._compare_cleanup(empty_progress=True)
-                return
-            self.app_view.update_progress(message='Inlezen Somtoday bestand', percentage=20)
-        elif part == 2:
-            try:
-                self.somtoday = SomtodayController(options=self.options).somtoday
+                self.somtoday = SomtodayCsvController(settings=self.settings).somtoday
             except ValueError as e:
                 MessageBox.show_error(message='Somtoday bestand is niet correct gelezen',
                                       title='Fout bij inlezen Somtoday',
@@ -72,15 +56,31 @@ class WindowController:
                                       detail=str(e))
                 self._compare_cleanup(empty_progress=True)
                 return
-            self.app_view.update_progress(message='Initialiseren van vergelijking', percentage=40)
+            self.app_view.update_progress(message='Inlezen TBG-i bestand', percentage=40)
+        elif part == 2:
+            try:
+                self.tbgi = TbgiCsvController(settings=self.settings).tbgi
+            except ValueError as e:
+                MessageBox.show_error(message='TBG-i bestand is niet correct gelezen',
+                                      title='Fout bij inlezen TBG-i',
+                                      detail=str(e))
+                self._compare_cleanup(empty_progress=True)
+                return
+            except Exception as e:
+                MessageBox.show_error(message='Onbekende fout bij het lezen van het TBG-i bestand',
+                                      title='Onbekende fout bij inlezen TBG-i',
+                                      detail=str(e))
+                self._compare_cleanup(empty_progress=True)
+                return
+            self.app_view.update_progress(message='Initialiseren van vergelijking', percentage=20)
         elif part == 3:
-            self.vergelijk = Vergelijk(tbgi=self.tbgi, somtoday=self.somtoday, options=self.options)
-            self.app_view.update_progress(message='TBGI met Somtoday vergelijken', percentage=60)
+            self.vergelijk = Vergelijk(tbgi=self.tbgi, somtoday=self.somtoday, options=self.settings)
+            self.app_view.update_progress(message='Somtoday met TBG-i vergelijken', percentage=60)
         elif part == 4:
-            self.vergelijk.check_tbgi()
-            self.app_view.update_progress(message='Somtoday met TBGI vergelijken', percentage=80)
-        elif part == 5:
             self.vergelijk.check_somtoday()
+            self.app_view.update_progress(message='TBG-i met Somtoday vergelijken', percentage=80)
+        elif part == 5:
+            self.vergelijk.check_tbgi()
             self.app_view.update_progress(message='Vergelijking afgerond', percentage=100)
             self.app_view.display(self.vergelijk.telling, self.vergelijk.fouten)
             self._compare_cleanup()

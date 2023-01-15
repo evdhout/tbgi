@@ -1,15 +1,16 @@
 import pandas as pd
 from datetime import date
-from models.options import Options
+from models.settings import Settings
 from models.telling_status import TellingStatus
 
 
 class Categorie:
-    def __init__(self, options: Options):
-        self.teldatum = options.teldatum
-        self.peildatum_cat1 = options.peildatum_cat1
-        self.peildatum_cat2 = options.peildatum_cat2
-        self.soort = options.soort
+    def __init__(self, settings: Settings):
+        self.settings = settings
+        self.teldatum = settings.teldatum
+        self.peildatum_cat1 = settings.peildatum_cat1
+        self.peildatum_cat2 = settings.peildatum_cat2
+        self.soort = settings.soort
 
     def get_category_somtoday(self,
                               dinl: date, nat: str, begin: date, eind: date,
@@ -45,13 +46,13 @@ class Categorie:
             return TellingStatus.NIET_BEKOSTIGBAAR
         elif not bekostigbaar:
             return TellingStatus.NIET_BEKOSTIGBAAR
-        elif Options.REGULIER == self.soort and '10' == signaal:
+        elif Settings.REGULIER == self.soort and '10' == signaal:
             return TellingStatus.CATEGORIE_1
-        elif Options.NIEUWKOMER == self.soort and "1" == cat_nk:
+        elif Settings.NIEUWKOMER == self.soort and "1" == cat_nk:
             return TellingStatus.CATEGORIE_1
-        elif Options.NIEUWKOMER == self.soort and "2" == cat_nk:
+        elif Settings.NIEUWKOMER == self.soort and "2" == cat_nk:
             return TellingStatus.CATEGORIE_2
-        elif Options.REGULIER == self.soort:
+        elif Settings.REGULIER == self.soort:
             return TellingStatus.REGULIER
         else:
             return TellingStatus.TBGI_ONBEKEND

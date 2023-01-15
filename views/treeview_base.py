@@ -8,11 +8,12 @@ from models.fout import Fout
 
 
 class ColumnDef:
-    def __init__(self, col_id: str, col_label: str, col_width: int, col_align: str):
+    def __init__(self, col_id: str, col_label: str, col_width: int, col_align: str, col_stretch: bool = False):
         self.id: str = col_id
         self.width: int = col_width
         self.label: str = col_label
         self.align: str = col_align
+        self.stretch: bool = col_stretch
 
 
 class TreeviewBase:
@@ -35,7 +36,7 @@ class TreeviewBase:
                                                      xscrollcommand=error_scroll_x.set)
 
         for c in columns:
-            self.error_tree.column(c.id, anchor=c.align, width=c.width)
+            self.error_tree.column(c.id, anchor=c.align, width=c.width, stretch=c.stretch)
             self.error_tree.heading(c.id, text=c.label, anchor=c.align)
 
         self.error_tree.tag_configure('odd_row', background="white")

@@ -28,9 +28,12 @@ class Signaal:
                 ' zijn tot praktijkonderwijs.',
                 'Voor deze teldatum heeft DUO de bekostigingsstatus ambtshalve vastgesteld. Reden: [1]',
                 'DUO heeft de eerder ambtshalve vastgestelde bekostigingsstatus voor deze teldatum verwijderd. Vanaf'
-                ' nu wordt de bekostigingsstatus weer volgens de beslisregels statustoekenning bepaald. Reden: [1]'
+                ' nu wordt de bekostigingsstatus weer volgens de beslisregels statustoekenning bepaald. Reden: [1]',
+                'De inschrijvng wordt niet bekostigd omdat het op [1] een opleiding betreft in de fase MBO'
+                ' van de Leerroute.',
+                'De inschrijving wordt niet bekostigd omdat de leerling een herprofileerder is.',
                 ]
-    PARAMETERS = [0, 0, 1, 1, 1, 0, 0, 5, 5, 0, 0, 0, 1, 1]
+    PARAMETERS = [0, 0, 1, 1, 1, 0, 0, 5, 5, 0, 0, 0, 1, 1, 1, 0]
 
     def __init__(self, signal_number: int, parameters: [str] or None = None):
         self.number: int = signal_number

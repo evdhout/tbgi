@@ -1,31 +1,20 @@
 import pandas as pd
+from models.somtoday_bestand import SomtodayBestand
+from collections import namedtuple
 
 
-class Somtoday:
-    COLUMN_TYPES = {'Leerlingnummer': 'Int32',
-                    'Volledige Naam': str,
-                    'BSN': 'Int64',
-                    'Onderwijsnummer': 'Int64',
-                    'Eerste nationaliteit': 'category',
-                    'Stamgroep': 'category',
-                    'Bekostiging': 'category',
-                    'Niet versturen naar BRON J/N': bool
-                    }
+class Somtoday(SomtodayBestand):
+    CATEGORIE = 'categorie'
 
-    # DATE_COLUMNS = ['Datum in Nederland', 'Inschrijfdatum', 'Uitschrijfdatum']
-    DATE_COLUMNS = ['Datum in Nederland', 'Inschrijfdatum']
+    def __init__(self, somtoday: namedtuple):
+        self.data: dict = somtoday._asdict()
 
-    COLUMN_NAMES = {'Leerlingnummer': 'llno',
-                    'Volledige Naam': 'naam',
-                    'Onderwijsnummer': 'OWN',
-                    'Eerste Nationaliteit': 'nat',
-                    'Stamgroep': 'stam',
-                    'Bekostiging': 'bek',
-                    'Datum in Nederland': 'dinl',
-                    'Inschrijfdatum': 'begin',
-                    'Uitschrijfdatum': 'eind',
-                    'Niet versturen naar BRON J/N': 'bron'
-                    }
+    def __getitem__(self, item):
+        return self.data[item]
 
-    def __init__(self, somtoday: pd.DataFrame):
-        self.somtoday: pd.DataFrame = somtoday
+    def has_bsn(self) -> bool:
+        return not pd.isna(self.data[Somtoday.BSN])
+
+    def has_own(self) -> bool:
+        return not pd.isna(self.data[Somtoday.OWN])
+

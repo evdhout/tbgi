@@ -2,42 +2,43 @@ import argparse
 import configparser
 from datetime import date
 
-from models.options import Options
+from models.settings import Settings
 from functions.path_checks import argparse_file_exists, directory_exists
 
 
-class OptionsController:
+class SettingsController:
     def __init__(self, program_type: str = 'cli'):
         self.call_type = program_type
 
         if 'cli' == program_type:
-            args = OptionsController.parse_arguments()
+            args = SettingsController.parse_arguments()
         else:
-            args = OptionsController.read_ini()
-        self.options = Options(**args)
+            args = SettingsController.read_ini()
+        self.settings = Settings(**args)
 
     @staticmethod
     def read_ini():
-        options = {}
+        ini_settings = {}
         config = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
         config.read('tbgi.ini')
 
-        options['verbose'] = config.getboolean('DEFAULT', 'verbose', fallback=False)
-        options['verbose'] = True
-        initial_directory = config.get('DEFAULT', 'initial directory', fallback=None)
+        ini_settings['debug'] = config.getboolean('TBGI', 'debug', fallback=False)
+        ini_settings['debug'] = True
+        initial_directory = config.get('TBGI', 'initial directory', fallback=None)
         if initial_directory is not None:
-            options['initial directory'] = directory_exists(initial_directory)
-        tbgi_file = config.get('DEFAULT', 'tbgi', fallback=None)
+            ini_settings['initial directory'] = directory_exists(initial_directory)
+        tbgi_file = config.get('TBGI', 'tbgi', fallback=None)
         if tbgi_file is not None:
-            options['tbgi'] = tbgi_file
-        somtoday_file = config.get('DEFAULT', 'somtoday', fallback=None)
+            ini_settings['tbgi'] = tbgi_file
+        somtoday_file = config.get('TBGI', 'somtoday', fallback=None)
         if somtoday_file is not None:
-            options['somtoday'] = somtoday_file
-        return options
+            ini_settings['somtoday'] = somtoday_file
+        ini_settings['vestiging'] = config.get('TBGI', 'vestiging', fallback=None)
+        return ini_settings
 
     @staticmethod
     def parse_arguments():
-        parser = argparse.ArgumentParser(description="Lees de TBGI, bereken aantallen en vergelijk met Somtoday.",
+        parser = argparse.ArgumentParser(description="Lees de TBG-i, bereken aantallen en vergelijk met Somtoday.",
                                          add_help=False)
         parser.add_argument('-h', '--help', action='help', help='toon dit bericht en stop')
         parser.add_argument('-s', '--soort',
@@ -52,14 +53,17 @@ class OptionsController:
                             default=date.today().year,
                             type=int,
                             help='in welk jaar ligt de teldatum?')
-        parser.add_argument('-v', '--verbose',
+        parser.add_argument('-v', '--vestiging',
+                            type=str,
+                            help='de vestiging (BRIN+2) waarvoor de TBG-i moet worden verwerkt')
+        parser.add_argument('-d', '--debug',
                             help="toon extra informatie tijdens verwerking",
                             action="store_true")
         parser.add_argument('tbgi',
                             type=argparse_file_exists,
-                            help="het csv-bestand met de tbgi")
+                            help="het csv-bestand met de TBG-i")
         parser.add_argument('somtoday',
                             type=argparse_file_exists,
-                            help="het csv-bestand met de export uit somtoday")
+                            help="het csv-bestand met de export uit Somtoday")
         args = parser.parse_args()
         return vars(args)

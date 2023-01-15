@@ -1,7 +1,7 @@
 from datetime import date, datetime
 
 
-class Options:
+class Settings:
     NIEUWKOMER = 'nieuwkomer'
     REGULIER = 'regulier'
 
@@ -24,16 +24,17 @@ class Options:
 
     def __init__(self, **kwargs):
         # config options read from ini only
-        self.verbose: bool = kwargs.get('verbose', False)
         self.initial_directory: str or None = kwargs.get('initial directory', None)
 
         # options read from command line or from window
+        self.debug: bool = kwargs.get('debug', False)
         self.tbgi: str or None = None
         self.somtoday: str or None = None
+        self.vestiging: str or None = None
         self.today = datetime.now()
         self.bekostigingsjaar: int = self.today.year
-        self.teldatum_naam: str = Options.TELDATUM_PER_MAAND[self.today.month]
-        self.soort: str = Options.NIEUWKOMER
+        self.teldatum_naam: str = Settings.TELDATUM_PER_MAAND[self.today.month]
+        self.soort: str = Settings.NIEUWKOMER
         self.teldatum: date or None = None
         self.peildatum_cat1: date or None = None
         self.peildatum_cat2: date or None = None
@@ -41,32 +42,34 @@ class Options:
         self.update_settings(**kwargs)
 
     def update_settings(self, **kwargs):
-        self.tbgi = kwargs.get('tbgi', None)
-        self.somtoday = kwargs.get('somtoday', None)
+        self.tbgi = kwargs.get('tbgi', self.tbgi)
+        self.somtoday = kwargs.get('somtoday', self.somtoday)
         self.bekostigingsjaar = int(kwargs.get('bekostigingsjaar', self.today.year))
-
-        self.verbose = kwargs.get('verbose', self.verbose)
+        self.vestiging = kwargs.get('vestiging', self.vestiging)
+        self.debug = kwargs.get('debug', self.debug)
 
         teldatum = kwargs.get('teldatum', self.today.month)
         try:
-            self.teldatum_naam = Options.TELDATUM_PER_MAAND[teldatum]
+            self.teldatum_naam = Settings.TELDATUM_PER_MAAND[teldatum]
         except KeyError:
             self.teldatum_naam = teldatum
         except TypeError:
             self.teldatum_naam = teldatum
 
         try:
-            self.soort: str or None = Options.SOORT_TELDATUM[kwargs.get('soort', Options.NIEUWKOMER)]
+            self.soort: str or None = Settings.SOORT_TELDATUM[kwargs.get('soort', Settings.NIEUWKOMER)]
         except KeyError:
             raise TypeError(f"Incorrect type teldatum '{self.soort}'.")
 
-        if Options.NIEUWKOMER == self.soort:
+        if Settings.NIEUWKOMER == self.soort:
             self.teldatum = date(self.bekostigingsjaar, self.MAANDNUMMER_TELDATUM[self.teldatum_naam], 1)
         else:
             self.teldatum = date(self.bekostigingsjaar - 1, 10, 1)
 
         self.peildatum_cat1 = date(self.bekostigingsjaar - 2, 10, 1)
         self.peildatum_cat2 = date(self.bekostigingsjaar - 2, self.MAANDNUMMER_TELDATUM[self.teldatum_naam], 1)
+
+        self.message(self.__str__())
 
     def __str__(self):
         return (f"TBGI             = {self.tbgi}\n"
@@ -75,13 +78,14 @@ class Options:
                 f"Teldatum naam    = {self.teldatum_naam}\n"
                 f"Teldatum         = {self.teldatum}\n"
                 f"Soort teldatum   = {self.soort}\n"
+                f"Vestiging        = {self.vestiging}\n"
                 f"Peildatum cat1   = {self.peildatum_cat1}\n"
                 f"Peildatum cat2   = {self.peildatum_cat2}\n"
-                f"Verbose          = {self.verbose}")
+                f"Debug            = {self.debug}")
 
-    def message(self, message: str):
-        if self.verbose:
-            print(message)
+    def message(self, message: str, end='\n'):
+        if self.debug:
+            print(message, end=end)
 
     def is_regulier(self) -> bool:
         return self.soort == 'regulier'

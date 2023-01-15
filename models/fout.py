@@ -1,12 +1,25 @@
 import pandas as pd
 from models.leerling import Leerling
+from models.somtoday import Somtoday
+from models.tbgi import Tbgi
 
 
 class Fout:
     ONBEKENDE_LEERLING = 0
     MEERVOUDIGE_LEERLING = 1
     LEERLING_NIET_GELIJK = 2
-    MELDING = ['Onbekende leerling', 'Leerling meerdere keren gevonden', 'Leerling niet gelijk']
+    MEERDERE_LEERLINGEN_BSN = 3
+    MEERDERE_LEERLINGEN_OWN = 4
+    MATCH_OWN_MET_BSN = 5
+    LEERLING_MEER_KEER_GETELD_IN_TBGI = 6
+    ONBEKENDE_LEERLING_TBGI = 7
+    ONBEKENDE_LEERLING_SOMTODAY = 8
+    MELDING = ['Onbekende leerling', 'Leerling meerdere keren gevonden', 'Leerling niet gelijk',
+               'Meerdere leerlingen met hetzelfde BSN', 'Meerdere leerlingen met hetzelfde OWN',
+               'Leerling gevonden op OWN, maar leerling heeft al BSN',
+               'De leerling is twee keer geteld in de TBG-i',
+               'Leerling niet in Somtoday',
+               'Leerling niet in TBG-i']
 
     TBGI = 0
     SOMTODAY = 1
@@ -15,40 +28,59 @@ class Fout:
     def __init__(self,
                  fout: int,
                  bron: int = TBGI,
-                 leerling: Leerling or None = None,
-                 tbgi: pd.Series or None = None):
+                 leerling: Leerling or [Leerling] or None = None,
+                 tbgi: Tbgi or [Tbgi] or None = None):
         self.fout: int = fout
         self.bron: int = bron
         self.leerling: [Leerling] = []
-        self.tbgi: [pd.Series] = []
+        self.tbgi: [Tbgi] = []
 
         if leerling is not None:
-            self.leerling.append(leerling)
+            if type(leerling) is list:
+                self.leerling = leerling
+            else:
+                self.leerling = [leerling]
         if tbgi is not None:
-            self.tbgi.append(tbgi)
+            if type(tbgi) is list:
+                self.tbgi = tbgi
+            else:
+                self.tbgi = [tbgi]
 
     def __str__(self):
         if self.fout == Fout.LEERLING_NIET_GELIJK:
-            return(f'{self.leerling[0].llno} ({self.leerling[0].naam}) '
-                   f'met {Fout._get_bsn_own_string(bsn=self.tbgi[0]["BSN"], own=self.tbgi[0]["OWN"])} niet gelijk:\n'
-                   f'  Somtoday categorie: {self.leerling[0].categorie}\n'
-                   f'  TBGI categorie:     {self.tbgi[0]["categorie"]}')
+            leerling: Somtoday = self.leerling[0]
+            tbgi: Tbgi = self.tbgi[0]
+            return(f'{leerling[Somtoday.LEERLINGNUMMER]} ({leerling[Somtoday.VOLLEDIGE_NAAM]}) met '
+                   f'{Fout._get_bsn_own_string(bsn=tbgi[Tbgi.BSN], own=tbgi[Tbgi.OWN])} niet gelijk:\n'
+                   f'  Somtoday categorie: {leerling[Somtoday.CATEGORIE]}\n'
+                   f'  TBGI categorie:     {tbgi[Tbgi.CATEGORIE]}')
         elif self.bron == Fout.TBGI:
-            bsn_own_string = Fout._get_bsn_own_string(bsn=self.tbgi[0]['BSN'], own=self.tbgi[0]['OWN'])
+            tbgi: Tbgi = self.tbgi[0]
+            bsn_own_string = Fout._get_bsn_own_string(bsn=tbgi[Tbgi.BSN], own=tbgi[Tbgi.OWN])
             if self.fout == Fout.ONBEKENDE_LEERLING:
                 return f'Leerling met {bsn_own_string} niet gevonden in Somtoday.'
             elif self.fout == Fout.MEERVOUDIGE_LEERLING:
-                return f'Leerling met {bsn_own_string} meerdere keren gevonden in Somtoday.'
+                return(f'Leerling met {bsn_own_string} meerdere keren gevonden in Somtoday: '
+                       f'{", ".join([ll[Somtoday.LEERLINGNUMMER] for ll in self.leerling])}.')
+            elif self.fout == Fout.LEERLING_MEER_KEER_GETELD_IN_TBGI:
+                bsn = self.get_tbgi_bsns()
+                own = self.get_tbgi_owns()
+
+                return(f'Leerling meer keer geteld. BSN: {bsn}, OWN: {own} '
+                       f'Somtoday: {self.leerling[0].somtoday[Somtoday.LEERLINGNUMMER]} '
+                       f'({self.leerling[0].somtoday[Somtoday.VOLLEDIGE_NAAM]})')
             else:
                 return f'Onbekende fout {self.fout} voor leerling met {bsn_own_string}.'
         elif self.bron == Fout.SOMTODAY:
-            leerling_string = (f'{self.leerling[0].llno} ({self.leerling[0].naam}) met '
-                               f'{Fout._get_bsn_own_string(bsn=self.leerling[0].BSN, own=self.leerling[0].OWN)}')
+            leerling: Somtoday = self.leerling[0]
+            leerling_string = (f'{leerling[Somtoday.LEERLINGNUMMER]} ({leerling[Somtoday.VOLLEDIGE_NAAM]}) met '
+                               f'{Fout._get_bsn_own_string(bsn=leerling[Somtoday.BSN], own=leerling[Somtoday.OWN])}')
             if self.fout == Fout.ONBEKENDE_LEERLING:
                 return(f'{leerling_string} niet gevonden in TBGI.\n'
-                       f'  Status Somtoday "{self.leerling[0].categorie}".')
+                       f'  Status Somtoday "{leerling[Somtoday.CATEGORIE]}".')
             elif self.fout == Fout.MEERVOUDIGE_LEERLING:
-                return f'{leerling_string} meerdere keren gevonden in TBGI.'
+                return(f'{leerling_string} meerdere keren gevonden in TBGI op regel '
+                       f'{", ".join([t[Tbgi.REGEL_NUMMER] for t in self.tbgi])}')
             else:
                 return f'Onbekende fout {self.fout} voor {leerling_string}.'
         else:
@@ -62,6 +94,12 @@ class Fout:
         if not pd.isna(own) and own != '':
             bsn_own.append(f'OWN "{own}"')
         return ' of '.join(bsn_own)
+
+    def get_tbgi_bsns(self) -> str:
+        return ', '.join([str(t[Tbgi.BSN]) for t in self.tbgi if not pd.isna(t[Tbgi.BSN])])
+
+    def get_tbgi_owns(self) -> str:
+        return ', '.join([str(t[Tbgi.OWN]) for t in self.tbgi if not pd.isna(t[Tbgi.OWN])])
 
     def add_leerling(self, leerling: Leerling):
         self.leerling.append(leerling)

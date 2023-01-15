@@ -17,7 +17,7 @@ class TellingStatus:
     ALT_REGULIER = [REGULIER, REGULIER_NL]
 
     @staticmethod
-    def is_gelijk(s1: str, s2: str):
+    def is_gelijk(s1: str, s2: str) -> bool:
         if s1 == s2:
             return True
         elif s1 in TellingStatus.ALT_REGULIER and s2 in TellingStatus.ALT_REGULIER:
@@ -26,3 +26,7 @@ class TellingStatus:
             return True
         else:
             return False
+
+    @staticmethod
+    def is_actief(categorie: str) -> bool:
+        return categorie not in TellingStatus.ALT_NIET_INGESCHREVEN

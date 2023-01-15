@@ -3,15 +3,15 @@ import tkinter as tk
 from tkinter import Tk, StringVar, IntVar, filedialog, font
 from tkinter import ttk
 
-from models.options import Options
+from models.settings import Settings
 from views.results import ResultsView
 
 
 class AppView(Tk):
-    def __init__(self, options: Options):
+    def __init__(self, settings: Settings):
         super().__init__()
-        self.options = options
-        self.initial_directory = options.initial_directory
+        self.settings = settings
+        self.initial_directory = settings.initial_directory
         self.active_file_selectors = False
 
         self.title("Vergelijk TBG-I met Somtoday")
@@ -52,7 +52,7 @@ class AppView(Tk):
 
         self.tbgi_label = ttk.Label(master=self.config_frame, text='TBGI bestand:')
         self.tbgi_filename_string = StringVar(master=self, name='TBGI filename')
-        self.tbgi_filename_string.set(self.options.get('tbgi', 'Kies TBGI bestand'))
+        self.tbgi_filename_string.set(self.settings.get('tbgi', 'Kies TBGI bestand'))
         self.tbgi_filename_string.trace('w', self.validate)
         self.tbgi_filename_label = ttk.Label(master=self.config_frame, textvariable=self.tbgi_filename_string)
         self.tbgi_label.grid(row=0, column=0, sticky="E")
@@ -60,7 +60,7 @@ class AppView(Tk):
 
         self.somtoday_label = ttk.Label(master=self.config_frame, text='Somtoday bestand:', style='Bold.TLabel')
         self.somtoday_filename_string = StringVar(self, name='Somtoday filename')
-        self.somtoday_filename_string.set(self.options.get('somtoday', 'Kies Somtoday bestand'))
+        self.somtoday_filename_string.set(self.settings.get('somtoday', 'Kies Somtoday bestand'))
         self.somtoday_filename_string.trace('w', self.validate)
         self.somtoday_filename_label = ttk.Label(master=self.config_frame, textvariable=self.somtoday_filename_string)
         self.somtoday_label.grid(row=1, column=0, sticky="E")
@@ -68,13 +68,13 @@ class AppView(Tk):
 
         self.soort_teldatum_label = ttk.Label(master=self.config_frame, text='Soort teldatum:')
         self.soort_teldatum_string = StringVar(self, name='Soort teldatum')
-        self.soort_teldatum_string.set(options.soort)
+        self.soort_teldatum_string.set(settings.soort)
         self.soort_teldatum_string.trace('w', self.change_soort_teldatum)
         self.soort_teldatum_frame = ttk.Frame(master=self.config_frame)
-        self.soort_teldatum_nieuwkomer = ttk.Radiobutton(master=self.soort_teldatum_frame, text=Options.NIEUWKOMER,
-                                                         variable=self.soort_teldatum_string, value=Options.NIEUWKOMER)
-        self.soort_teldatum_regulier = ttk.Radiobutton(master=self.soort_teldatum_frame, text=Options.REGULIER,
-                                                       variable=self.soort_teldatum_string, value=Options.REGULIER)
+        self.soort_teldatum_nieuwkomer = ttk.Radiobutton(master=self.soort_teldatum_frame, text=Settings.NIEUWKOMER,
+                                                         variable=self.soort_teldatum_string, value=Settings.NIEUWKOMER)
+        self.soort_teldatum_regulier = ttk.Radiobutton(master=self.soort_teldatum_frame, text=Settings.REGULIER,
+                                                       variable=self.soort_teldatum_string, value=Settings.REGULIER)
         self.soort_teldatum_label.grid(row=2, column=0, sticky="E")
         self.soort_teldatum_frame.grid(row=2, column=1, sticky="W")
         self.soort_teldatum_nieuwkomer.grid(row=0, column=0, sticky="W")
@@ -82,7 +82,7 @@ class AppView(Tk):
 
         self.bekostigingsjaar_label = ttk.Label(master=self.config_frame, text='Bekostigingsjaar:')
         self.bekostigingsjaar_string = StringVar(self, name='Bekostigingsjaar')
-        self.bekostigingsjaar_string.set(str(options.bekostigingsjaar))
+        self.bekostigingsjaar_string.set(str(settings.bekostigingsjaar))
         self.bekostigingsjaar_spinbox = ttk.Spinbox(master=self.config_frame,
                                                     from_=2018, to=2100, increment=1,
                                                     textvariable=self.bekostigingsjaar_string)
@@ -92,15 +92,15 @@ class AppView(Tk):
         self.teldatum_frame = ttk.Frame(master=self.config_frame)
         self.teldatum_label = ttk.Label(master=self.config_frame, text='Teldatum:')
         self.teldatum_int = IntVar(master=self, name='Teldatum')
-        self.teldatum_int.set(options.teldatum.month)
-        self.teldatum_jan = ttk.Radiobutton(master=self.teldatum_frame, text=Options.MAAND_NAAM[Options.JANUARI],
-                                            variable=self.teldatum_int, value=Options.JANUARI)
-        self.teldatum_apr = ttk.Radiobutton(master=self.teldatum_frame, text=Options.MAAND_NAAM[Options.APRIL],
-                                            variable=self.teldatum_int, value=Options.APRIL)
-        self.teldatum_jul = ttk.Radiobutton(master=self.teldatum_frame, text=Options.MAAND_NAAM[Options.JULI],
-                                            variable=self.teldatum_int, value=Options.JULI)
-        self.teldatum_okt = ttk.Radiobutton(master=self.teldatum_frame, text=Options.MAAND_NAAM[Options.OKTOBER],
-                                            variable=self.teldatum_int, value=Options.OKTOBER)
+        self.teldatum_int.set(settings.teldatum.month)
+        self.teldatum_jan = ttk.Radiobutton(master=self.teldatum_frame, text=Settings.MAAND_NAAM[Settings.JANUARI],
+                                            variable=self.teldatum_int, value=Settings.JANUARI)
+        self.teldatum_apr = ttk.Radiobutton(master=self.teldatum_frame, text=Settings.MAAND_NAAM[Settings.APRIL],
+                                            variable=self.teldatum_int, value=Settings.APRIL)
+        self.teldatum_jul = ttk.Radiobutton(master=self.teldatum_frame, text=Settings.MAAND_NAAM[Settings.JULI],
+                                            variable=self.teldatum_int, value=Settings.JULI)
+        self.teldatum_okt = ttk.Radiobutton(master=self.teldatum_frame, text=Settings.MAAND_NAAM[Settings.OKTOBER],
+                                            variable=self.teldatum_int, value=Settings.OKTOBER)
         self.teldatum_label.grid(row=4, column=0, sticky="E")
         self.teldatum_frame.grid(row=4, column=1, sticky="W")
         self.teldatum_jan.grid(row=0, column=1, sticky="W")
@@ -134,11 +134,11 @@ class AppView(Tk):
             self.vergelijk_button.state(['disabled', '!active', '!focus', '!hover'])
 
     def change_soort_teldatum(self, *args):
-        if self.soort_teldatum_string.get() == Options.REGULIER:
+        if self.soort_teldatum_string.get() == Settings.REGULIER:
             self.teldatum_jan.configure(state=tk.DISABLED)
             self.teldatum_apr.configure(state=tk.DISABLED)
             self.teldatum_jul.configure(state=tk.DISABLED)
-            self.teldatum_int.set(Options.OKTOBER)
+            self.teldatum_int.set(Settings.OKTOBER)
         else:
             self.teldatum_jan.configure(state=tk.NORMAL)
             self.teldatum_apr.configure(state=tk.NORMAL)
@@ -193,7 +193,7 @@ class AppView(Tk):
             filename_string.set(filename)
 
     def update_progress(self, message: str, percentage: int):
-        self.options.message(message)
+        self.settings.message(message)
         self.loading_string.set(message)
         self.loading_progress_percentage.set(percentage)
 

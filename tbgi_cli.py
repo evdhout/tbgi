@@ -1,23 +1,23 @@
 #!python3
 
-from models.options import Options
+from models.options import Settings
 from controllers.compare_controller import Vergelijk
-from controllers.options_controller import OptionsController
+from controllers.options_controller import SettingsController
 from controllers.tbgi_controller import TbgiController
 from controllers.somtoday_controller import SomtodayController
 
 
 if __name__ == '__main__':
-    options: Options = OptionsController(program_type='cli').options
-    if options.verbose:
+    options: Settings = SettingsController(program_type='cli').settings
+    if options.debug:
         print(options)
 
-    options.message(f"Inlezen van '{options.tbgi}'")
-    tbgi = TbgiController(options).tbgi
+    options.message(f"Inlezen van '{options.data}'")
+    tbgi = TbgiController(options).data
     options.message("TBGI ingelezen")
 
-    options.message(f"Inlezen van '{options.somtoday}'")
-    somtoday = SomtodayController(options).somtoday
+    options.message(f"Inlezen van '{options.data}'")
+    somtoday = SomtodayController(options).data
     options.message("Somtoday ingelezen")
 
     vergelijk: Vergelijk = Vergelijk(somtoday=somtoday, tbgi=tbgi, options=options)
@@ -29,7 +29,7 @@ if __name__ == '__main__':
     print("PANDAS TELLING VOLGT TER CONTROLE")
     print("---")
     print("Telling TBGI")
-    print(tbgi.tbgi['categorie'].value_counts())
+    print(tbgi.data['categorie'].value_counts())
     print("---")
     print("Telling Somtoday")
-    print(somtoday.somtoday['categorie'].value_counts())
+    print(somtoday.data['categorie'].value_counts())

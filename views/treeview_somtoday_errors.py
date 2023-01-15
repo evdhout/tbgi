@@ -6,6 +6,7 @@ import pandas as pd
 
 from models.fout import Fout
 from models.leerling import Leerling
+from models.somtoday import Somtoday
 from views.treeview_base import TreeviewBase, ColumnDef
 
 
@@ -13,7 +14,7 @@ class SomtodayErrorView(TreeviewBase):
 
     def __init__(self, master: Toplevel or Tk):
         columns: [ColumnDef] = [
-            ColumnDef("LLNO", "LLno", 50, tk.W),
+            ColumnDef("LLNR", "LLnr", 50, tk.W),
             ColumnDef("NAME", "Naam", 200, tk.W),
             ColumnDef("GROUP", "Groep", 45, tk.W),
             ColumnDef("BSN", "BSN", 100, tk.W),
@@ -31,18 +32,18 @@ class SomtodayErrorView(TreeviewBase):
         odd_row = True
         fout: Fout
         for fout in fouten:
-            somtoday: Leerling = fout.leerling[0]
+            leerling: Somtoday = fout.leerling[0].somtoday
 
             tags = ('odd_row', ) if odd_row else ('even_row', )
             self.error_tree.insert(parent='', index='end',
-                                   iid=str(somtoday.llno),
-                                   text=str(somtoday.llno),
-                                   values=(somtoday.llno,
-                                           somtoday.naam,
-                                           somtoday.stam,
-                                           somtoday.BSN if not pd.isna(somtoday.BSN) else '',
-                                           somtoday.OWN if not pd.isna(somtoday.OWN) is not None else '',
-                                           somtoday.categorie,
+                                   iid=str(leerling[Somtoday.LEERLINGNUMMER]),
+                                   text=str(leerling[Somtoday.LEERLINGNUMMER]),
+                                   values=(leerling[Somtoday.LEERLINGNUMMER],
+                                           leerling[Somtoday.VOLLEDIGE_NAAM],
+                                           leerling[Somtoday.STAMGROEP],
+                                           leerling[Somtoday.BSN] if leerling.has_bsn() else '',
+                                           leerling[Somtoday.OWN] if leerling.has_own() else '',
+                                           leerling[Somtoday.CATEGORIE],
                                            fout.MELDING[fout.fout]),
                                    tags=tags)
 

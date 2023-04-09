@@ -23,7 +23,7 @@ class ResultsView:
         self.notebook.add(self.tbgi_frame, text='TBGI')
         self.notebook.add(self.somtoday_frame, text='Somtoday')
 
-        self.notebook.grid(row=row, column=column)
+        self.notebook.grid(row=row, column=column, sticky="NSEW")
 
         self.telling = TellingView(master=self.count_frame)
         self.tbgi = TbgiErrorView(master=self.tbgi_frame)

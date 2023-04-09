@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import Tk, Toplevel, font
 from tkinter import ttk
+from datetime import datetime
 
 import pandas as pd
 
@@ -20,7 +21,8 @@ class SomtodayErrorView(TreeviewBase):
             ColumnDef("BSN", "BSN", 100, tk.W),
             ColumnDef("OWN", "OWN", 100, tk.W),
             ColumnDef("STAT", "Status", 150, tk.W),
-            ColumnDef("ERROR", "Foutmelding", 400, tk.W)
+            ColumnDef("DINL", "Datum in Nederland", 110, tk.W),
+            ColumnDef("ERROR", "Foutmelding", 500, tk.W)
         ]
         super(SomtodayErrorView, self).__init__(master=master, columns=columns)
 
@@ -35,6 +37,7 @@ class SomtodayErrorView(TreeviewBase):
             leerling: Somtoday = fout.leerling[0].somtoday
 
             tags = ('odd_row', ) if odd_row else ('even_row', )
+
             self.error_tree.insert(parent='', index='end',
                                    iid=str(leerling[Somtoday.LEERLINGNUMMER]),
                                    text=str(leerling[Somtoday.LEERLINGNUMMER]),
@@ -44,6 +47,7 @@ class SomtodayErrorView(TreeviewBase):
                                            leerling[Somtoday.BSN] if leerling.has_bsn() else '',
                                            leerling[Somtoday.OWN] if leerling.has_own() else '',
                                            leerling[Somtoday.CATEGORIE],
+                                           leerling[Somtoday.DATUM_IN_NEDERLAND].strftime("%Y-%m-%d"),
                                            fout.MELDING[fout.fout]),
                                    tags=tags)
 

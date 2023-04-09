@@ -1,10 +1,6 @@
 import tkinter as tk
-from tkinter import Tk, Toplevel, font
+from tkinter import Tk, Toplevel
 from tkinter import ttk
-
-import pandas as pd
-
-from models.fout import Fout
 
 
 class ColumnDef:
@@ -18,14 +14,14 @@ class ColumnDef:
 
 class TreeviewBase:
     def __init__(self, master: Toplevel or Tk, columns: [ColumnDef]):
-        self.master = master
+        self.master: Toplevel or Tk = master
 
         self.error_frame = ttk.Frame(master)
-        self.error_frame.pack()
+        self.error_frame.pack(fill=tk.BOTH)
 
-        error_scroll_y = tk.Scrollbar(self.error_frame)
+        error_scroll_y = tk.Scrollbar(self.error_frame, orient="vertical")
         error_scroll_y.pack(side=tk.RIGHT, fill=tk.Y)
-        error_scroll_x = tk.Scrollbar(self.error_frame)
+        error_scroll_x = tk.Scrollbar(self.error_frame, orient="horizontal")
         error_scroll_x.pack(side=tk.BOTTOM, fill=tk.X)
 
         self.error_tree: ttk.Treeview = ttk.Treeview(self.error_frame,
@@ -42,7 +38,7 @@ class TreeviewBase:
         self.error_tree.tag_configure('odd_row', background="white")
         self.error_tree.tag_configure('even_row', background='#E8E8E8')
 
-        self.error_tree.pack(pady=20)
+        self.error_tree.pack(pady=20, fill=tk.BOTH)
 
         error_scroll_y.config(command=self.error_tree.yview)
         error_scroll_x.config(command=self.error_tree.xview)

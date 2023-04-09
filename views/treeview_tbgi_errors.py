@@ -17,7 +17,7 @@ class TbgiErrorView(TreeviewBase):
             ColumnDef("BSN", "BSN", 100, tk.W),
             ColumnDef("OWN", "OWN", 100, tk.W),
             ColumnDef("LLnr", "LLnr", 50, tk.W),
-            ColumnDef("ERROR", "Foutmelding", 400, tk.W, True)
+            ColumnDef("ERROR", "Foutmelding", 500, tk.W)
         ]
         super(TbgiErrorView, self).__init__(master=master, columns=columns)
 
@@ -26,7 +26,7 @@ class TbgiErrorView(TreeviewBase):
         self.bind_detail_view(self.show_tbgi_detail)
 
     def show_tbgi_detail(self, _event):
-        tbgi = self.tbgi[int(self.error_tree.selection()[0])]
+        tbgi = self.tbgi[self.error_tree.item(self.error_tree.selection()[0])['values'][0]]
         detail_frame = self.create_detail_window(title=f"TBG-I details regel {tbgi['REGEL_NUMMER']}")
 
         row_number = 1
@@ -76,8 +76,9 @@ class TbgiErrorView(TreeviewBase):
                 ll_nr = ', '.join([str(ll.ll_nr) for ll in fout.leerling])
 
             tags = ('odd_row', ) if odd_row else ('even_row', )
+            # print(f"{fout_regel} {bsn} / {own} / {ll_nr} : {fout.MELDING[fout.fout]} / {fout.fout}")
             self.error_tree.insert(parent='', index='end',
-                                   iid=fout_regel,
+                                   iid=fout_regel * 100 + fout.fout,
                                    text=fout_regel,
                                    values=(fout_regel, bsn, own, ll_nr, fout.MELDING[fout.fout]),  # str(fout)
                                    tags=tags)

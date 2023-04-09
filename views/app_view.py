@@ -13,6 +13,7 @@ class AppView(Tk):
         self.settings = settings
         self.initial_directory = settings.initial_directory
         self.active_file_selectors = False
+        self.iconphoto(False, tk.PhotoImage(file='resources/icon.png'))
 
         self.title("Vergelijk TBG-I met Somtoday")
 
@@ -42,13 +43,26 @@ class AppView(Tk):
                   background=[('selected', '#3677A8')],
                   foreground=[('selected', 'white')])
 
-        self.app_frame = ttk.Frame(self)
+        self.columnconfigure(index=0, weight=1)
+        self.rowconfigure(index=0, weight=1)
 
-        self.app_frame.grid(column=0, row=0, sticky="N", padx=5, pady=5)
+        res_x = self.winfo_screenwidth()
+        res_y = self.winfo_screenheight()
+        win_x = 1320 if res_x > 1320 else res_x
+        win_y = res_y - 100
+        self.settings.message(f'Windows size / screen resolution = {win_x} x {win_y} / {res_x}x{res_y} ')
 
-        self.config_frame = ttk.LabelFrame(self.app_frame, text='Instellingen vergelijking', width=800, height=250)
-        self.config_frame.grid(column=0, row=0, sticky="N")
-        self.config_frame.grid_propagate(0)
+        self.app_frame = ttk.Frame(self, width=win_x, height=win_y)
+        self.app_frame.columnconfigure(index=0, weight=1)
+        self.app_frame.rowconfigure(index=0, weight=0)  # do not extend config frame
+        self.app_frame.rowconfigure(index=1, weight=1)  # do extend result frame
+
+        self.app_frame.grid(column=0, row=0, sticky="NSEW", padx=5, pady=5)
+        self.app_frame.grid_propagate(False)
+
+        self.config_frame = ttk.LabelFrame(self.app_frame, text='Instellingen vergelijking', height=250)
+        self.config_frame.grid(column=0, row=0, sticky="EW")
+        self.config_frame.grid_propagate(False)
 
         self.tbgi_label = ttk.Label(master=self.config_frame, text='TBGI bestand:')
         self.tbgi_filename_string = StringVar(master=self, name='TBGI filename')
@@ -122,18 +136,18 @@ class AppView(Tk):
         self.loading_label.grid(row=11, column=1, sticky="W")
         self.loading_progress.grid(row=12, column=1, sticky="W")
 
-        self.results_notebook = ResultsView(master=self.app_frame, width=800, height=400)
+        self.results_notebook = ResultsView(master=self.app_frame, width=win_x, height=win_y - 100)
 
         self.enable_all_input()
 
-    def validate(self, *args):
+    def validate(self, *_args):
         if self.tbgi_filename_string.get() != 'Kies TBGI bestand' \
                 and self.somtoday_filename_string.get() != 'Kies Somtoday bestand':
             self.vergelijk_button.state(['!disabled', '!active', '!focus', '!hover'])
         else:
             self.vergelijk_button.state(['disabled', '!active', '!focus', '!hover'])
 
-    def change_soort_teldatum(self, *args):
+    def change_soort_teldatum(self, *_args):
         if self.soort_teldatum_string.get() == Settings.REGULIER:
             self.teldatum_jan.configure(state=tk.DISABLED)
             self.teldatum_apr.configure(state=tk.DISABLED)

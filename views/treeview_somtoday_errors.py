@@ -21,7 +21,7 @@ class SomtodayErrorView(TreeviewBase):
             ColumnDef("BSN", "BSN", 100, tk.W),
             ColumnDef("OWN", "OWN", 100, tk.W),
             ColumnDef("STAT", "Status", 150, tk.W),
-            ColumnDef("DINL", "Datum in Nederland", 110, tk.W),
+            ColumnDef("DINL", "Datum in Nederland", 120, tk.W),
             ColumnDef("ERROR", "Foutmelding", 500, tk.W)
         ]
         super(SomtodayErrorView, self).__init__(master=master, columns=columns)

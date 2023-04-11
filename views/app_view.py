@@ -2,6 +2,7 @@ import platform
 import tkinter as tk
 from tkinter import Tk, StringVar, IntVar, filedialog, font
 from tkinter import ttk
+from views.icon import b64icon
 
 from models.settings import Settings
 from views.results import ResultsView
@@ -13,7 +14,7 @@ class AppView(Tk):
         self.settings = settings
         self.initial_directory = settings.initial_directory
         self.active_file_selectors = False
-        self.iconphoto(False, tk.PhotoImage(file='resources/icon.png'))
+        self.iconphoto(True, tk.PhotoImage(data=b64icon))
 
         self.title("Vergelijk TBG-I met Somtoday")
 
@@ -49,7 +50,7 @@ class AppView(Tk):
         res_x = self.winfo_screenwidth()
         res_y = self.winfo_screenheight()
         win_x = 1320 if res_x > 1320 else res_x
-        win_y = res_y - 100
+        win_y = res_y - 200
         self.settings.message(f'Windows size / screen resolution = {win_x} x {win_y} / {res_x}x{res_y} ')
 
         self.app_frame = ttk.Frame(self, width=win_x, height=win_y)
@@ -136,7 +137,7 @@ class AppView(Tk):
         self.loading_label.grid(row=11, column=1, sticky="W")
         self.loading_progress.grid(row=12, column=1, sticky="W")
 
-        self.results_notebook = ResultsView(master=self.app_frame, width=win_x, height=win_y - 100)
+        self.results_notebook = ResultsView(master=self.app_frame, width=win_x, height=win_y - 450)
 
         self.enable_all_input()
 

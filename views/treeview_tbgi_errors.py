@@ -17,6 +17,7 @@ class TbgiErrorView(TreeviewBase):
             ColumnDef("BSN", "BSN", 100, tk.W),
             ColumnDef("OWN", "OWN", 100, tk.W),
             ColumnDef("LLnr", "LLnr", 50, tk.W),
+            ColumnDef("DiNL", "DiNL", 110, tk.W),
             ColumnDef("ERROR", "Foutmelding", 500, tk.W)
         ]
         super(TbgiErrorView, self).__init__(master=master, columns=columns)
@@ -65,6 +66,8 @@ class TbgiErrorView(TreeviewBase):
             fout_regel = tbgi[Tbgi.REGEL_NUMMER]
             fout_bsn = tbgi[Tbgi.BSN]
             fout_own = tbgi[Tbgi.OWN]
+            fout_dinl = '-' if pd.isna(tbgi[Tbgi.DATUM_BINNENKOMST_IN_NL]) \
+                else f'{tbgi[Tbgi.DATUM_BINNENKOMST_IN_NL]:%Y-%m-%d}'
 
             self.tbgi[fout_regel] = tbgi
 
@@ -80,7 +83,7 @@ class TbgiErrorView(TreeviewBase):
             self.error_tree.insert(parent='', index='end',
                                    iid=fout_regel * 100 + fout.fout,
                                    text=fout_regel,
-                                   values=(fout_regel, bsn, own, ll_nr, fout.MELDING[fout.fout]),  # str(fout)
+                                   values=(fout_regel, bsn, own, ll_nr, fout_dinl, fout.MELDING[fout.fout]),  # str(fout)
                                    tags=tags)
 
             odd_row = not odd_row

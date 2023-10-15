@@ -63,6 +63,11 @@ class Vergelijk:
                                    bron=Fout.TBGI,
                                    leerling=leerling,
                                    tbgi=tbgi))
+            if tbgi[Tbgi.DATUM_BINNENKOMST_IN_NL] != leerling.somtoday[Somtoday.DATUM_IN_NEDERLAND]:
+                fouten.append(Fout(fout=Fout.DINL_NIET_GELIJK,
+                                   bron=Fout.TBGI,
+                                   leerling=leerling,
+                                   tbgi=tbgi))
             if len(self.telling_tbgi_leerlingen[leerling.somtoday[Somtoday.LEERLINGNUMMER]]) > 1:
                 fouten.append(
                     Fout(fout=Fout.LEERLING_MEER_KEER_GETELD_IN_TBGI,

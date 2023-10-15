@@ -19,6 +19,8 @@ class Categorie:
             return TellingStatus.NIET_INGESCHREVEN
         elif not pd.isnull(eind) and eind < self.teldatum:
             return TellingStatus.NIET_INGESCHREVEN
+        elif pd.isna(dinl):  # leerling woont niet in Nederland, maar wel op ingeschreven
+            return TellingStatus.REGULIER
         elif bek != 'Standaard':
             return TellingStatus.NIET_BEKOSTIGBAAR
         elif stam[:2] == 'IB':

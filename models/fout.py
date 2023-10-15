@@ -14,12 +14,14 @@ class Fout:
     LEERLING_MEER_KEER_GETELD_IN_TBGI = 6
     ONBEKENDE_LEERLING_TBGI = 7
     ONBEKENDE_LEERLING_SOMTODAY = 8
+    DINL_NIET_GELIJK = 9
     MELDING = ['Onbekende leerling', 'Leerling meerdere keren gevonden', 'Leerling niet gelijk',
                'Meerdere leerlingen met hetzelfde BSN', 'Meerdere leerlingen met hetzelfde OWN',
                'Leerling gevonden op OWN, maar leerling heeft al BSN',
                'De leerling is twee keer geteld in de TBG-i',
                'Leerling niet in Somtoday',
-               'Leerling niet in TBG-i']
+               'Leerling niet in TBG-i',
+               'Datum in Nederland niet gelijk']
 
     TBGI = 0
     SOMTODAY = 1

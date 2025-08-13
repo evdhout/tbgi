@@ -46,7 +46,7 @@ class SomtodayCsvController:
                                                              x[Somtoday.PLAATSING_TOT_DATUM].date(),
                                                              x[Somtoday.BEKOSTIGING],
                                                              x[Somtoday.STAMGROEP],
-                                                             x[Somtoday.NIET_VERSTUREN_NAAR_BRON]),
+                                                             x[Somtoday.NIET_VERSTUREN_NAAR_ROD]),
                            axis=1
                            ).astype('category')
 

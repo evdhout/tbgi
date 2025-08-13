@@ -28,7 +28,7 @@ class Categorie:
         elif stam[:1] == 'U':
             return TellingStatus.UITWISSELING
         elif bron == 'J':
-            return TellingStatus.NIET_NAAR_BRON
+            return TellingStatus.NIET_NAAR_ROD
         elif nat == 'Nederlandse':
             return TellingStatus.REGULIER_NL
         elif dinl > self.peildatum_cat1:

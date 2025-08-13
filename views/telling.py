@@ -7,7 +7,7 @@ from models.telling_status import TellingStatus as ts
 
 class TellingView:
     ROWS = [ts.CATEGORIE_1, ts.CATEGORIE_2, ts.REGULIER, ts.REGULIER_NL, ts.NIET_BEKOSTIGBAAR,
-            ts.NIET_INGESCHREVEN, ts.NIET_NAAR_BRON, ts.UITWISSELING, ts.INBURGERING]
+            ts.NIET_INGESCHREVEN, ts.NIET_NAAR_ROD, ts.UITWISSELING, ts.INBURGERING]
 
     def __init__(self, master: Toplevel or Tk):
         self.master = master

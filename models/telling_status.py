@@ -1,8 +1,8 @@
 class TellingStatus:
     NIET_INGESCHREVEN = "Niet ingeschreven"
     NIET_BEKOSTIGBAAR = "Niet bekostigbaar"
-    NIET_NAAR_BRON = "Niet verzenden naar BRON"
-    NIET_NAAR_BRON_NIET_BEKOSTIGBAAR = "Niet naar BRON en niet bekostigbaar"
+    NIET_NAAR_ROD = "Niet verzenden naar ROD"
+    NIET_NAAR_ROD_NIET_BEKOSTIGBAAR = "Niet naar ROD en niet bekostigbaar"
     DUBBELE_INSCHRIJVING = "Niet bekostigbaar, dubbele inschrijving"
     INBURGERING = "Inburgering"
     UITWISSELING = "Uitwisseling"

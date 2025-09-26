@@ -43,7 +43,7 @@ class SomtodayErrorView(TreeviewBase):
                                    text=str(leerling[Somtoday.LEERLINGNUMMER]),
                                    values=(leerling[Somtoday.LEERLINGNUMMER],
                                            leerling[Somtoday.VOLLEDIGE_NAAM],
-                                           leerling[Somtoday.STAMGROEP],
+                                           leerling[Somtoday.STAMGROEP] if not pd.isna(leerling[Somtoday.STAMGROEP]) else '',
                                            leerling[Somtoday.BSN] if leerling.has_bsn() else '',
                                            leerling[Somtoday.OWN] if leerling.has_own() else '',
                                            leerling[Somtoday.CATEGORIE],

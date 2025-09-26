@@ -23,6 +23,8 @@ class Categorie:
             return TellingStatus.REGULIER
         elif bek != 'Standaard':
             return TellingStatus.NIET_BEKOSTIGBAAR
+        elif pd.isna(stam):
+            return TellingStatus.GEEN_STAMGROEP
         elif stam[:2] == 'IB':
             return TellingStatus.INBURGERING
         elif stam[:1] == 'U':

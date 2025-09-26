@@ -3,6 +3,7 @@ class TellingStatus:
     NIET_BEKOSTIGBAAR = "Niet bekostigbaar"
     NIET_NAAR_ROD = "Niet verzenden naar ROD"
     NIET_NAAR_ROD_NIET_BEKOSTIGBAAR = "Niet naar ROD en niet bekostigbaar"
+    GEEN_STAMGROEP = "Geen stamgroep bekend in Somtoday"
     DUBBELE_INSCHRIJVING = "Niet bekostigbaar, dubbele inschrijving"
     INBURGERING = "Inburgering"
     UITWISSELING = "Uitwisseling"

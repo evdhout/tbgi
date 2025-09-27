@@ -40,13 +40,14 @@ class SomtodayCsvController:
 
         c = Categorie(settings)
         somtoday[Somtoday.CATEGORIE] = \
-            somtoday.apply(lambda x: c.get_category_somtoday(x[Somtoday.DATUM_IN_NEDERLAND].date(),
-                                                             x[Somtoday.EERSTE_NATIONALITEIT],
-                                                             x[Somtoday.PLAATSING_VANAF_DATUM].date(),
-                                                             x[Somtoday.PLAATSING_TOT_DATUM].date(),
-                                                             x[Somtoday.BEKOSTIGING],
-                                                             x[Somtoday.STAMGROEP],
-                                                             x[Somtoday.NIET_VERSTUREN_NAAR_ROD]),
+            somtoday.apply(lambda x: c.get_category_somtoday(dinl=x[Somtoday.DATUM_IN_NEDERLAND].date(),
+                                                             oinl=x[Somtoday.NEDERLANDS_ONDERWIJS_SINDS].date(),
+                                                             nat=x[Somtoday.EERSTE_NATIONALITEIT],
+                                                             begin=x[Somtoday.PLAATSING_VANAF_DATUM].date(),
+                                                             eind=x[Somtoday.PLAATSING_TOT_DATUM].date(),
+                                                             bek=x[Somtoday.BEKOSTIGING],
+                                                             stam=x[Somtoday.STAMGROEP],
+                                                             bron=x[Somtoday.NIET_VERSTUREN_NAAR_ROD]),
                            axis=1
                            ).astype('category')
 

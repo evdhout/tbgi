@@ -12,6 +12,9 @@ class Settings:
         'regulier': 'regulier'
     }
 
+    REGELING_DINL = 'regeling datum in Nederland'
+    REGELING_OINL = 'regeling onderwijs in Nederland'
+
     JANUARI = 1
     APRIL = 4
     JULI = 7
@@ -33,6 +36,7 @@ class Settings:
         self.vestiging: str or None = None
         self.today = datetime.now()
         self.bekostigingsjaar: int = self.today.year
+        self.regeling: str = self.REGELING_DINL
         self.teldatum_naam: str = Settings.TELDATUM_PER_MAAND[self.today.month]
         self.soort: str = Settings.NIEUWKOMER
         self.teldatum: date or None = None
@@ -47,6 +51,11 @@ class Settings:
         self.bekostigingsjaar = int(kwargs.get('bekostigingsjaar', self.today.year))
         self.vestiging = kwargs.get('vestiging', self.vestiging)
         self.debug = kwargs.get('debug', self.debug)
+
+        if self.bekostigingsjaar < 2026:
+            self.regeling = self.REGELING_OINL
+        else:
+            self.regeling = self.REGELING_OINL
 
         teldatum = kwargs.get('teldatum', self.today.month)
         try:

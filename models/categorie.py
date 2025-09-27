@@ -11,15 +11,30 @@ class Categorie:
         self.peildatum_cat1 = settings.peildatum_cat1
         self.peildatum_cat2 = settings.peildatum_cat2
         self.soort = settings.soort
+        self.regeling = settings.regeling
+
+        print(self.settings.regeling)
+        print(self.peildatum_cat1)
+        print(self.peildatum_cat2)
+        print(self.soort)
+
 
     def get_category_somtoday(self,
-                              dinl: date, nat: str, begin: date, eind: date,
+                              dinl: date, oinl: date, nat: str, begin: date, eind: date,
                               bek: str, stam: str, bron: str) -> str:
+        if self.regeling == self.settings.REGELING_OINL:
+            check_datum = oinl
+        elif self.regeling == self.settings.REGELING_DINL:
+            check_datum = dinl
+        else:
+            return TellingStatus.REGELING_ONBEKEND
+
         if pd.isnull(begin) or begin > self.teldatum:
             return TellingStatus.NIET_INGESCHREVEN
         elif not pd.isnull(eind) and eind < self.teldatum:
             return TellingStatus.NIET_INGESCHREVEN
-        elif pd.isna(dinl):  # leerling woont niet in Nederland, maar wel op ingeschreven
+        elif self.regeling == self.settings.REGELING_DINL and pd.isna(check_datum):
+            # leerling woont niet in Nederland, maar wel ingeschreven
             return TellingStatus.REGULIER
         elif bek != 'Standaard':
             return TellingStatus.NIET_BEKOSTIGBAAR
@@ -33,9 +48,9 @@ class Categorie:
             return TellingStatus.NIET_NAAR_ROD
         elif nat == 'Nederlandse':
             return TellingStatus.REGULIER_NL
-        elif dinl > self.peildatum_cat1:
+        elif check_datum > self.peildatum_cat1:
             return TellingStatus.CATEGORIE_1
-        elif dinl > self.peildatum_cat2 and self.soort == 'nieuwkomer':
+        elif check_datum > self.peildatum_cat2 and self.soort == self.settings.NIEUWKOMER:
             return TellingStatus.CATEGORIE_2
         else:
             return TellingStatus.REGULIER

@@ -63,7 +63,8 @@ class Vergelijk:
                                    bron=Fout.TBGI,
                                    leerling=leerling,
                                    tbgi=tbgi))
-            if tbgi[Tbgi.DATUM_BINNENKOMST_IN_NL] != leerling.somtoday[Somtoday.DATUM_IN_NEDERLAND]:
+            if (self.options.regeling == Settings.REGELING_DINL
+                    and tbgi[Tbgi.DATUM_BINNENKOMST_IN_NL] != leerling.somtoday[Somtoday.DATUM_IN_NEDERLAND]):
                 fouten.append(Fout(fout=Fout.DINL_NIET_GELIJK,
                                    bron=Fout.TBGI,
                                    leerling=leerling,

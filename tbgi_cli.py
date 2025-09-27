@@ -1,35 +1,32 @@
 #!python3
 
-from models.options import Settings
+
 from controllers.compare_controller import Vergelijk
-from controllers.options_controller import SettingsController
-from controllers.tbgi_controller import TbgiController
-from controllers.somtoday_controller import SomtodayController
+from controllers.settings_controller import SettingsController
+from controllers.tbgi_csv_controller import TbgiCsvController
+from controllers.somtoday_csv_controller import SomtodayCsvController
 
 
 if __name__ == '__main__':
-    options: Settings = SettingsController(program_type='cli').settings
-    if options.debug:
-        print(options)
+    settings = SettingsController(program_type='cli').settings
+    settings.message(settings)
 
-    options.message(f"Inlezen van '{options.data}'")
-    tbgi = TbgiController(options).data
-    options.message("TBGI ingelezen")
+    settings.message(f"Inlezen van '{settings.tbgi}'")
+    tbgi = TbgiCsvController(settings=settings)
 
-    options.message(f"Inlezen van '{options.data}'")
-    somtoday = SomtodayController(options).data
-    options.message("Somtoday ingelezen")
+    settings.message(f"Inlezen van '{settings.somtoday}'")
+    somtoday = SomtodayCsvController(settings=settings)
 
-    vergelijk: Vergelijk = Vergelijk(somtoday=somtoday, tbgi=tbgi, options=options)
-    vergelijk.check_tbgi()
+    vergelijk: Vergelijk = Vergelijk(somtoday=somtoday.somtoday, tbgi=tbgi.tbgi, options=settings)
     vergelijk.check_somtoday()
+    vergelijk.check_tbgi()
     vergelijk.print_results()
 
     print()
     print("PANDAS TELLING VOLGT TER CONTROLE")
     print("---")
     print("Telling TBGI")
-    print(tbgi.data['categorie'].value_counts())
+    print(tbgi.tbgi.data['categorie'].value_counts())
     print("---")
     print("Telling Somtoday")
-    print(somtoday.data['categorie'].value_counts())
+    print(somtoday.somtoday.data['categorie'].value_counts())

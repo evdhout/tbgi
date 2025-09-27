@@ -53,7 +53,7 @@ class Settings:
         self.debug = kwargs.get('debug', self.debug)
 
         if self.bekostigingsjaar < 2026:
-            self.regeling = self.REGELING_OINL
+            self.regeling = self.REGELING_DINL
         else:
             self.regeling = self.REGELING_OINL
 

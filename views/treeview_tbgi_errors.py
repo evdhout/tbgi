@@ -11,8 +11,8 @@ from views.treeview_base import TreeviewBase, ColumnDef
 
 class TbgiErrorView(TreeviewBase):
 
-    def __init__(self, master: Toplevel or Tk):
-        columns: [ColumnDef] = [
+    def __init__(self, master: Toplevel | Tk):
+        columns: list[ColumnDef] = [
             ColumnDef("ROWNO", "Regel", 50, tk.W),
             ColumnDef("BSN", "BSN", 100, tk.W),
             ColumnDef("OWN", "OWN", 100, tk.W),

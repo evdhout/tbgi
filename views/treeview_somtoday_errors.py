@@ -13,8 +13,8 @@ from views.treeview_base import TreeviewBase, ColumnDef
 
 class SomtodayErrorView(TreeviewBase):
 
-    def __init__(self, master: Toplevel or Tk):
-        columns: [ColumnDef] = [
+    def __init__(self, master: Toplevel | Tk):
+        columns: list[ColumnDef] = [
             ColumnDef("LLNR", "LLnr", 50, tk.W),
             ColumnDef("NAME", "Naam", 200, tk.W),
             ColumnDef("GROUP", "Groep", 45, tk.W),
@@ -22,11 +22,12 @@ class SomtodayErrorView(TreeviewBase):
             ColumnDef("OWN", "OWN", 100, tk.W),
             ColumnDef("STAT", "Status", 150, tk.W),
             ColumnDef("DINL", "Datum in Nederland", 120, tk.W),
+            ColumnDef("OINL", "NL onderwijs sinds", 120, tk.W),
             ColumnDef("ERROR", "Foutmelding", 500, tk.W)
         ]
         super(SomtodayErrorView, self).__init__(master=master, columns=columns)
 
-    def display_errors(self, fouten: [Fout]):
+    def display_errors(self, fouten: list[Fout]):
         # empty the current version of the tree
         self.empty_tree()
 
@@ -48,6 +49,7 @@ class SomtodayErrorView(TreeviewBase):
                                            leerling[Somtoday.OWN] if leerling.has_own() else '',
                                            leerling[Somtoday.CATEGORIE],
                                            leerling[Somtoday.DATUM_IN_NEDERLAND].strftime("%Y-%m-%d"),
+                                           leerling[Somtoday.NEDERLANDS_ONDERWIJS_SINDS].strftime("%Y-%m-%d"),
                                            fout.MELDING[fout.fout]),
                                    tags=tags)
 

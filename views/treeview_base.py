@@ -13,8 +13,8 @@ class ColumnDef:
 
 
 class TreeviewBase:
-    def __init__(self, master: Toplevel or Tk, columns: [ColumnDef]):
-        self.master: Toplevel or Tk = master
+    def __init__(self, master: Toplevel | Tk, columns: list[ColumnDef]):
+        self.master: Toplevel | Tk = master
 
         self.error_frame = ttk.Frame(master)
         self.error_frame.pack(fill=tk.BOTH)
